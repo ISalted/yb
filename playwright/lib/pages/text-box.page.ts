@@ -9,6 +9,7 @@ export interface TextBoxFormData {
   permanentAddress: string;
 }
 
+/** Page Object for the demoqa "Text Box" form (`/text-box`). */
 export class TextBoxPage extends BasePage {
   readonly selectors = {
     fullName: '#userName',

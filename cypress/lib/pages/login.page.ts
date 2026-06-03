@@ -1,3 +1,4 @@
+/** Page Object for the Saucedemo login page (`/`). */
 export class LoginPage {
   readonly url = '/';
 

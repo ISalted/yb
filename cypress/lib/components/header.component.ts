@@ -1,3 +1,4 @@
+/** Reusable header component shared across Saucedemo pages (cart badge, cart link, menu). */
 export class HeaderComponent {
   readonly selectors = {
     container: '[data-test="primary-header"]',
@@ -8,6 +9,7 @@ export class HeaderComponent {
     logoutLink: '[data-test="logout-sidebar-link"]',
   };
 
+  /** Returns the cart badge count as a number; the test owns the assertion (e.g. `.should('eq', 1)`). */
   getCartCount(): Cypress.Chainable<number> {
     return cy.get(this.selectors.cartBadge).then($el => Number($el.text()));
   }

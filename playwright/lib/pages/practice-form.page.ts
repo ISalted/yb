@@ -24,6 +24,7 @@ export const ModalLabel = {
 
 export type FieldName = 'firstName' | 'lastName' | 'email' | 'mobile' | 'gender';
 
+/** Page Object for the demoqa "Student Registration Form" (`/automation-practice-form`). */
 export class PracticeFormPage extends BasePage {
 
   readonly selectors = {
@@ -41,6 +42,11 @@ export class PracticeFormPage extends BasePage {
     },
   };
 
+  /**
+   * Fills the form with the provided data. Fields left `undefined` are skipped,
+   * which lets negative tests intentionally omit a single required field
+   * (e.g. `{ ...validData, firstName: undefined }`).
+   */
   @step()
   async fillForm(data: PracticeFormData) {
     if (data.firstName !== undefined) await this.page.fill(this.selectors.firstName, data.firstName);
