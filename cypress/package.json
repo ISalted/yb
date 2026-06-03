@@ -1,0 +1,20 @@
+{
+  "name": "cypress",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "cypress run",
+    "headed": "cypress run --headed",
+    "open": "cypress open"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "cypress": "^15.16.0",
+    "ts-interface-builder": "^0.3.3",
+    "ts-interface-checker": "^1.0.2",
+    "typescript": "^6.0.3"
+  }
+}

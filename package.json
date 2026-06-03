@@ -1,0 +1,14 @@
+{
+  "name": "your-bourse",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm --prefix playwright test && npm --prefix cypress test",
+    "test:pw": "npm --prefix playwright test",
+    "test:cy": "npm --prefix cypress test"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

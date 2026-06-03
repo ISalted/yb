@@ -1,0 +1,14 @@
+node_modules/
+dist/
+.env
+
+# Playwright artifacts
+playwright/playwright-report/
+playwright/test-results/
+
+# Cypress artifacts
+cypress/screenshots/
+cypress/videos/
+
+# OS
+.DS_Store
