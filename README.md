@@ -128,25 +128,36 @@ npm run report    # open the last HTML report
 
 ### 1. How would you scale this framework to support 300+ tests?
 
-The structure already carries most of the weight — Page Objects, a `WebClient`
-aggregator, typed routes and API services mean tests stay short and a UI change
-touches one file, not fifty. Beyond that I'd pull test data into typed
-factories so cases become data-driven instead of copy-pasted, tag tests
-(`@smoke`, `@api`, `@regression`) to run only what's relevant, and shard the run
-across CI machines so wall-clock time stays flat no matter how many tests there
-are. The `@step` traces and schema checks are what keep a suite that size
-debuggable.
+What makes it scale is separation, and it's already in place here. Tests stay
+short and only describe *what* is checked; the *how* lives underneath — Page
+Objects and a `WebClient` aggregator drive the UI, API service layers prepare
+data through the back end instead of clicking through screens. So a test rarely
+breaks from an unrelated UI change, and when it does, you fix it in one place.
+The next step is moving inline data into typed factories so cases become
+data-driven instead of copy-pasted.
+
+The rest is running the right tests at the right time: tag tests (`@smoke`,
+`@api`) to run a small slice on demand or the whole suite at night, and shard
+the run across machines  so adding tests doesn't make it slower. Failures stay
+debuggable at any size — the `@step` traces and schema checks point straight to
+what broke — and retries only flag unstable tests, never hide them. At 300 or
+600 tests the structure is the same; there's just more of it.
 
 ### 2. How would you reduce and monitor flakiness in CI?
 
-Most flakiness comes from waiting on time instead of state, so the rule is no
-`sleep`s — only web-first, auto-retrying assertions and waits on real signals
-(network, element state). Keep tests independent: fresh navigation each time, no
-shared state, and set up data through the API instead of slow UI steps. To
-monitor it, every failure already ships with a trace/screenshot/video, so it's
-reproducible. I'd keep `retries: 2` on CI purely to _flag_ flaky tests — a test
-that only passes on retry is flaky, not green — push that data to a dashboard,
-and quarantine repeat offenders behind a tag until they're fixed.
+**Reduce.** Most flakiness is waiting on time instead of state — so no `sleep`s,
+only web-first auto-retrying assertions and waits on real signals. Keep tests
+independent: fresh navigation, no shared state, unique data per test so parallel
+runs don't collide, set up through the API not the UI. Mock unreliable
+third-party dependencies. And catch it early — run new tests several times on the
+PR; if one isn't green every time, it doesn't merge.
+
+**Monitor.** Every failure ships with a trace, screenshot and video, and
+per-test logs feed a central place (e.g. Kibana). What matters most is history:
+a dashboard tracking each test over time, since flaky shows up as "green with
+holes", not a clean fail. Retries stay at `2` only to *flag* it — passing on
+retry is reported flaky, not green — and new flakiness pings the team so it's
+fixed while fresh, with repeat offenders quarantined behind a tag.
 
 ### 3. What test strategy would you run on every Pull Request vs nightly runs?
 
