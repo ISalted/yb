@@ -1,4 +1,4 @@
-# Senior QA Automation — Technical Assignment
+# Technical Assignment
 
 End-to-end automation built with **Cypress** (Part 1) and **Playwright** (Part 2),
 in TypeScript. The focus is on a scalable architecture, stable selectors,
@@ -57,12 +57,12 @@ Both frameworks are environment-driven — no hard-coded base URLs or credential
 
 **Cypress** (`cypress/cypress.config.ts`) — `env` block:
 
-| Key            | Purpose                          |
-| -------------- | -------------------------------- |
-| `username`     | Saucedemo login                  |
-| `password`     | Saucedemo password               |
-| `apiUrl`       | Reqres base URL                  |
-| `reqresApiKey` | Reqres API key (`x-api-key`)     |
+| Key            | Purpose                      |
+| -------------- | ---------------------------- |
+| `username`     | Saucedemo login              |
+| `password`     | Saucedemo password           |
+| `apiUrl`       | Reqres base URL              |
+| `reqresApiKey` | Reqres API key (`x-api-key`) |
 
 > Note: `reqres.in` now requires a free API key (`x-api-key`). Replace the
 > placeholder key with your own from [app.reqres.in](https://app.reqres.in).
@@ -92,15 +92,15 @@ npm run report    # open the last HTML report
 
 ## Coverage
 
-| Part | Task | Test(s)                                                                 |
-| ---- | ---- | ---------------------------------------------------------------------- |
-| 1    | 1    | Login → add to cart → cart badge = 1                                    |
-| 1    | 2    | Network/API validation of `manifest.json` (status + structure)         |
-| 1    | 3    | `GET /api/users?page=2` — status 200 + full schema check               |
-| 2    | 4    | Text-box form — fill, submit, verify rendered output                   |
-| 2    | 5    | Practice form — 6 positive + 7 negative cases (5.1–5.13)               |
-| 2    | 6    | `GET /posts` via request context — array + first-item schema check     |
-| 2    | 7    | Failure diagnostics (screenshots, video, trace) — config-level         |
+| Part | Task | Test(s)                                                            |
+| ---- | ---- | ------------------------------------------------------------------ |
+| 1    | 1    | Login → add to cart → cart badge = 1                               |
+| 1    | 2    | Network/API validation of `manifest.json` (status + structure)     |
+| 1    | 3    | `GET /api/users?page=2` — status 200 + full schema check           |
+| 2    | 4    | Text-box form — fill, submit, verify rendered output               |
+| 2    | 5    | Practice form — 6 positive + 7 negative cases (5.1–5.13)           |
+| 2    | 6    | `GET /posts` via request context — array + first-item schema check |
+| 2    | 7    | Failure diagnostics (screenshots, video, trace) — config-level     |
 
 ## Key engineering decisions
 
@@ -131,7 +131,7 @@ npm run report    # open the last HTML report
 The foundations are already in place: Page Objects + components, a `WebClient`
 aggregator, typed routes, and API service layers — so tests stay declarative as
 the count grows. To reach 300+ I would: (a) keep a strict layering rule —
-tests describe *intent*, Page Objects/services own *interaction*, so UI changes
+tests describe _intent_, Page Objects/services own _interaction_, so UI changes
 touch one file; (b) move test data into typed factories/fixtures instead of
 inline objects, enabling data-driven cases; (c) shard execution across CI
 runners (`--shard` in Playwright, parallel containers / `cypress-split` in
