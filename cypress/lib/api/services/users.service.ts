@@ -1,7 +1,7 @@
 /** Service for the Reqres `/api/users` resource. */
 export class UsersService {
-  private readonly baseUrl = Cypress.env('apiUrl');
-  private readonly apiKey = Cypress.env('reqresApiKey');
+  private readonly baseUrl = Cypress.expose('apiUrl');
+  private readonly apiKey = Cypress.expose('reqresApiKey');
 
   /** `GET /api/users?page=N` — returns the raw response so the test owns status/schema assertions. */
   getUsers(page: number): Cypress.Chainable<Cypress.Response<any>> {

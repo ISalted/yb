@@ -13,7 +13,10 @@ export default defineConfig({
       runMode: 2,
       openMode: 0,
     },
-    env: {
+    // Public (non-secret) test config, read in the browser via Cypress.expose().
+    // allowCypressEnv is disabled — Cypress.env() browser access is deprecated.
+    allowCypressEnv: false,
+    expose: {
       username: 'standard_user',
       password: 'secret_sauce',
       apiUrl: 'https://reqres.in',

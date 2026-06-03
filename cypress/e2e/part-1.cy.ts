@@ -18,7 +18,7 @@ describe('Part 1 — Cypress', () => {
   });
 
   it('Task 1 — should log in, add a product to the cart and verify badge equals 1', () => {
-    loginPage.login(Cypress.env('username'), Cypress.env('password'));
+    loginPage.login(Cypress.expose('username'), Cypress.expose('password'));
 
     inventoryPage.assertLoaded();
     inventoryPage.addItemToCart('sauce-labs-backpack');

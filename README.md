@@ -128,41 +128,32 @@ npm run report    # open the last HTML report
 
 ### 1. How would you scale this framework to support 300+ tests?
 
-The foundations are already in place: Page Objects + components, a `WebClient`
-aggregator, typed routes, and API service layers — so tests stay declarative as
-the count grows. To reach 300+ I would: (a) keep a strict layering rule —
-tests describe _intent_, Page Objects/services own _interaction_, so UI changes
-touch one file; (b) move test data into typed factories/fixtures instead of
-inline objects, enabling data-driven cases; (c) shard execution across CI
-runners (`--shard` in Playwright, parallel containers / `cypress-split` in
-Cypress) to keep wall-clock time flat; (d) tag tests (`@smoke`, `@regression`,
-`@api`) to run targeted subsets; (e) enforce consistency with lint rules and a
-shared `tsconfig`. Schema checkers and the `@step` decorator keep large suites
-readable and debuggable as they scale.
+The structure already carries most of the weight — Page Objects, a `WebClient`
+aggregator, typed routes and API services mean tests stay short and a UI change
+touches one file, not fifty. Beyond that I'd pull test data into typed
+factories so cases become data-driven instead of copy-pasted, tag tests
+(`@smoke`, `@api`, `@regression`) to run only what's relevant, and shard the run
+across CI machines so wall-clock time stays flat no matter how many tests there
+are. The `@step` traces and schema checks are what keep a suite that size
+debuggable.
 
 ### 2. How would you reduce and monitor flakiness in CI?
 
-Reduce: rely exclusively on **web-first, auto-retrying assertions** and never
-use fixed `sleep`s (already the rule here); wait on real signals (network
-responses, element state) rather than time; keep tests isolated and
-independent (fresh navigation per test, no shared mutable state); prefer
-deterministic test data and API setup over slow UI setup where possible.
-Monitor: enable Playwright `trace`/`video`/`screenshot` on failure and Cypress
-screenshots so every failure is reproducible; run a low retry count on CI
-(`retries: 2`) **only to surface** flakiness, while reporting tests that pass
-on retry as flaky rather than green; publish results to a dashboard
-(Testomatio / Allure) to track flaky-rate over time and quarantine the worst
-offenders behind a tag until fixed.
+Most flakiness comes from waiting on time instead of state, so the rule is no
+`sleep`s — only web-first, auto-retrying assertions and waits on real signals
+(network, element state). Keep tests independent: fresh navigation each time, no
+shared state, and set up data through the API instead of slow UI steps. To
+monitor it, every failure already ships with a trace/screenshot/video, so it's
+reproducible. I'd keep `retries: 2` on CI purely to _flag_ flaky tests — a test
+that only passes on retry is flaky, not green — push that data to a dashboard,
+and quarantine repeat offenders behind a tag until they're fixed.
 
 ### 3. What test strategy would you run on every Pull Request vs nightly runs?
 
-**On every PR** — fast feedback, fail early: a `@smoke` subset of critical
-paths plus all API/contract tests (they're quick and stable), run on a single
-browser (Chromium), sharded for speed, with traces on failure. Target: a few
-minutes, blocking merge.
-
-**Nightly** — full confidence, breadth over speed: the entire suite including
-all negative/edge cases, across multiple browsers and viewports, with retries
-and full diagnostics (video + trace) retained. Nightly results feed the
-flakiness dashboard and notify the team on regressions. This split keeps PRs
-fast and unblocked while ensuring nothing is left permanently unverified.
+On a PR you want speed: run the `@smoke` critical paths plus all API tests
+(fast and stable), one browser, sharded, traces on failure. A few minutes,
+blocking the merge. Nightly is the opposite trade-off — run everything,
+including the negative and edge cases, across more browsers and viewports, with
+full diagnostics kept. The nightly run is what feeds the flakiness dashboard and
+pings the team on regressions, so PRs stay fast without anything going
+unverified.

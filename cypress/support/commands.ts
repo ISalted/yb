@@ -9,8 +9,8 @@ declare global {
 }
 
 Cypress.Commands.add('login', (
-  username = Cypress.env('username'),
-  password = Cypress.env('password')
+  username = Cypress.expose('username'),
+  password = Cypress.expose('password')
 ) => {
   cy.visit('/');
   cy.get('[data-test="username"]').type(username);
